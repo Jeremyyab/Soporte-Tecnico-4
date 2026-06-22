@@ -1,0 +1,666 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8"/>
+  <meta name="viewport" content="width=device-width,initial-scale=1"/>
+  <title>A-TI-314 · Semana 4 — Habilidades del profesional de TI</title>
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800;900&display=swap');
+
+    :root{
+      --bg1:#eaf1f8;
+      --bg2:#cfdceb;
+      --card:#ffffffcc;
+      --card2:#ffffffd9;
+      --stroke:#cfd9e6;
+      --stroke2:#b9c8da;
+      --text:#0f172a;
+      --muted:#50607a;
+      --brand:#0b66c3;
+      --brand2:#0a4f96;
+      --accent:#0ea5e9;
+      --green:#16a34a;
+      --amber:#d97706;
+      --red:#dc2626;
+      --purple:#7c3aed;
+      --shadow: 0 18px 45px rgba(15, 23, 42, .12);
+      --round: 22px;
+    }
+
+    *{box-sizing:border-box}
+    body{
+      margin:0;
+      font-family: 'Plus Jakarta Sans', ui-sans-serif, system-ui, -apple-system, Segoe UI, sans-serif;
+      color:var(--text);
+      background:
+        radial-gradient(900px 500px at 30% 10%, #ffffff 0%, rgba(255,255,255,0) 60%),
+        radial-gradient(800px 450px at 75% 65%, #ffffff 0%, rgba(255,255,255,0) 55%),
+        linear-gradient(160deg, var(--bg1), var(--bg2));
+      min-height:100vh;
+      display:flex;
+      justify-content:center;
+      align-items:flex-start;
+      padding:16px;
+    }
+
+    .shell{ width:min(1400px, 100%); position:relative; }
+
+    .topbar{
+      background:linear-gradient(180deg, rgba(255,255,255,.82), rgba(255,255,255,.58));
+      border:1px solid var(--stroke);
+      border-radius:18px;
+      box-shadow: 0 10px 30px rgba(15,23,42,.06);
+      padding:12px 16px;
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      gap:12px;
+      flex-wrap:wrap;
+    }
+
+    .brand{ display:flex; align-items:center; gap:12px; min-width:0; flex-shrink:0; }
+    .brand img{ height:38px; width:auto; display:block; }
+    .brand .txt{ display:flex; flex-direction:column; line-height:1.2; min-width:0; }
+    .brand .txt b{ font-size:13px; color:var(--brand2); letter-spacing:.2px; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
+    .brand .txt span{ font-size:11px; color:var(--muted); white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
+
+    .topcenter{ display:flex; align-items:center; gap:10px; flex:1; justify-content:center; min-width:0; }
+    .counterPill{
+      display:flex; align-items:center; gap:8px; padding:7px 12px;
+      border-radius:999px; border:1px solid var(--stroke);
+      background:rgba(255,255,255,.65); font-weight:800;
+      color:var(--brand2); font-size:13px; white-space:nowrap;
+    }
+    .dot{ width:9px;height:9px;border-radius:999px;background:var(--brand); box-shadow:0 0 0 4px rgba(11,102,195,.12); flex-shrink:0; }
+
+    .actions{ display:flex; align-items:center; gap:8px; flex-wrap:wrap; justify-content:flex-end; flex-shrink:0; }
+
+    .pill{
+      padding:7px 11px; border-radius:999px; border:1px solid var(--stroke);
+      background:rgba(255,255,255,.65); color:var(--muted); display:flex;
+      align-items:center; gap:7px; font-size:11px; user-select:none; white-space:nowrap;
+    }
+    .pill .miniDot{ width:8px;height:8px;border-radius:999px; background:rgba(11,102,195,.9); box-shadow:0 0 0 3px rgba(11,102,195,.10); flex-shrink:0; }
+
+    .btn{
+      appearance:none; border:1px solid var(--stroke2); background:rgba(255,255,255,.78);
+      color:var(--brand2); padding:7px 12px; border-radius:999px; font-weight:700;
+      font-size:12px; cursor:pointer; transition:.15s transform ease, .15s background ease, .15s box-shadow ease;
+      user-select:none; white-space:nowrap; font-family: inherit;
+    }
+    .btn:hover{ transform: translateY(-1px); background:rgba(255,255,255,.95); box-shadow:0 4px 12px rgba(15,23,42,.08); }
+    .btn:active{ transform: translateY(0px); }
+    .btn.primary{ background:rgba(11,102,195,.10); border-color: rgba(11,102,195,.28); }
+    .btn.danger{ color:#7a2230; background:rgba(220,38,38,.08); border-color: rgba(220,38,38,.20); }
+    .btn.on{ background:rgba(11,102,195,.18); border-color: rgba(11,102,195,.38); }
+
+    .deck{
+      margin-top:12px;
+      background:linear-gradient(180deg, rgba(255,255,255,.55), rgba(255,255,255,.32));
+      border:1px solid var(--stroke); border-radius: var(--round);
+      box-shadow: var(--shadow); padding:14px; position:relative;
+    }
+
+    .slide{
+      background:rgba(255,255,255,.42); border:1px solid var(--stroke);
+      border-radius: 20px; padding:18px;
+      display:grid; grid-template-columns: 1.1fr .9fr;
+      gap:16px; min-height: 610px; position:relative; overflow:hidden;
+    }
+
+    .left{
+      padding:4px 4px 4px 6px; display:flex; flex-direction:column;
+      overflow-y:auto; max-height:610px;
+    }
+    .left::-webkit-scrollbar{ width:4px; }
+    .left::-webkit-scrollbar-thumb{ background:var(--stroke2); border-radius:99px; }
+
+    .kicker{ display:flex; align-items:center; gap:10px; margin-bottom:8px; flex-shrink:0; }
+    .kicker .bar{ width:34px; height:9px; border-radius:999px; background:linear-gradient(90deg, var(--brand2), var(--accent)); box-shadow:0 0 0 5px rgba(11,102,195,.08); flex-shrink:0; }
+    .kicker span{ font-weight:800; letter-spacing:.4px; font-size:11px; color:var(--brand2); text-transform:uppercase; }
+
+    h1{ margin:0 0 8px 0; font-size:clamp(26px, 3.2vw, 42px); letter-spacing:-.6px; line-height:1.06; flex-shrink:0; }
+    .desc{ margin:0 0 12px 0; color:var(--muted); font-size:14px; line-height:1.55; flex-shrink:0; }
+
+    .grid{ display:grid; grid-template-columns: 1fr 1fr; gap:10px; margin-top:10px; margin-bottom:10px; }
+    .grid3{ display:grid; grid-template-columns: 1fr 1fr 1fr; gap:10px; margin-top:10px; margin-bottom:10px; }
+
+    .card{ background:rgba(255,255,255,.68); border:1px solid var(--stroke); border-radius:14px; padding:11px 13px; }
+    .card strong{ display:block; font-size:12.5px; margin-bottom:7px; color:var(--text); }
+    .card ul{ margin:0; padding-left:16px; color:var(--muted); font-size:12.5px; line-height:1.6; }
+    .card li{ margin:3px 0; }
+
+    .bigcard{ background:rgba(255,255,255,.68); border:1px solid var(--stroke); border-radius:14px; padding:11px 14px; margin-top:10px; }
+    .bigcard:first-child{ margin-top:0; }
+    .bigcard .title{ font-weight:800; color:var(--brand2); margin-bottom:5px; font-size:13px; }
+    .bigcard ul{ margin:4px 0 0 0; padding-left:16px; color:var(--muted); font-size:12.5px; line-height:1.6; }
+    .bigcard li{ margin:3px 0; }
+
+    .bigcard.green{ border-color:rgba(22,163,74,.25); background:rgba(22,163,74,.06); }
+    .bigcard.green .title{ color:var(--green); }
+    .bigcard.amber{ border-color:rgba(217,119,6,.25); background:rgba(217,119,6,.06); }
+    .bigcard.amber .title{ color:var(--amber); }
+    .bigcard.red{ border-color:rgba(220,38,38,.20); background:rgba(220,38,38,.05); }
+    .bigcard.red .title{ color:var(--red); }
+    .bigcard.purple{ border-color:rgba(124,58,237,.22); background:rgba(124,58,237,.05); }
+    .bigcard.purple .title{ color:var(--purple); }
+
+    code{ background:rgba(11,102,195,.08); color:var(--brand2); padding:1px 6px; border-radius:5px; font-size:.92em; }
+
+    .right{
+      border-radius:18px; border:1px solid var(--stroke);
+      background: radial-gradient(400px 260px at 70% 15%, rgba(255,255,255,.88), rgba(255,255,255,.0) 65%), linear-gradient(180deg, rgba(255,255,255,.42), rgba(255,255,255,.16));
+      padding:13px; display:flex; flex-direction:column; gap:11px;
+    }
+
+    .media{
+      background:rgba(255,255,255,.62); border:1px solid var(--stroke);
+      border-radius:16px; padding:10px; flex:1; display:flex;
+      align-items:center; justify-content:center; overflow:hidden;
+      position:relative; min-height:200px;
+    }
+    .media img{ max-width:100%; max-height:100%; border-radius:12px; display:none; box-shadow: 0 16px 38px rgba(15,23,42,.16); object-fit:cover; }
+    .media .placeholder{ color:var(--muted); font-size:12px; text-align:center; padding:16px; line-height:1.6; }
+
+    .rightBottom{ display:grid; grid-template-columns: 1fr 1fr; gap:10px; flex-shrink:0; }
+    .miniCard{ background:rgba(255,255,255,.68); border:1px solid var(--stroke); border-radius:14px; padding:11px 13px; }
+    .miniCard .label{ color:var(--muted); font-size:11px; margin-bottom:4px; font-weight:600; }
+    .miniCard .value{ font-weight:900; font-size:18px; color:var(--text); letter-spacing:-.2px; line-height:1.2; }
+
+    .controls{
+      margin-top:10px;
+      background:linear-gradient(180deg, rgba(255,255,255,.80), rgba(255,255,255,.54));
+      border:1px solid var(--stroke); border-radius:16px; padding:9px 12px;
+      display:flex; align-items:center; justify-content:space-between; gap:10px; flex-wrap:wrap;
+    }
+    .nav{ display:flex; align-items:center; gap:8px; flex-shrink:0; }
+    .progressWrap{ flex:1; display:flex; align-items:center; gap:10px; padding:0 8px; min-width:0; }
+    .progressTrack{ height:9px; border-radius:999px; background:rgba(15,23,42,.06); border:1px solid rgba(185,200,218,.7); overflow:hidden; flex:1; min-width:60px; }
+    .progressBar{ height:100%; width:5%; border-radius:999px; background:linear-gradient(90deg, var(--brand2), var(--accent)); transition: width .35s cubic-bezier(.4,0,.2,1); }
+    .hint{ color:var(--muted); font-size:11px; white-space:nowrap; flex-shrink:0; }
+
+    .revealRow{ display:flex; gap:8px; margin-top:8px; flex-wrap:wrap; }
+    .revealBox{ background:rgba(255,255,255,.72); border:1px dashed rgba(11,102,195,.35); border-radius:14px; padding:11px 13px; margin-top:8px; display:none; color:var(--muted); font-size:12.5px; line-height:1.65; }
+    .revealBox.show{ display:block; }
+
+    .penCanvas{ position:absolute; inset:0; pointer-events:none; z-index:50; border-radius: var(--round); }
+
+    .select{
+      border:1px solid var(--stroke2); background:rgba(255,255,255,.78); border-radius:999px;
+      padding:7px 10px; font-weight:700; color:var(--brand2); font-size:11px;
+      outline:none; cursor:pointer; font-family:inherit;
+    }
+
+    .timerBadge{
+      display:inline-flex; align-items:center; gap:6px; background:rgba(11,102,195,.10);
+      border:1px solid rgba(11,102,195,.22); border-radius:999px; padding:4px 10px;
+      font-size:11.5px; font-weight:700; color:var(--brand2); margin-bottom:8px;
+    }
+
+    .debateBox{
+      background:linear-gradient(135deg,rgba(14,165,233,.08),rgba(11,102,195,.04));
+      border:1px solid rgba(11,102,195,.22); border-left:4px solid var(--brand);
+      border-radius:14px; padding:12px 14px; margin-top:10px;
+    }
+    .debateBox .dtitle{ font-weight:800; font-size:12.5px; color:var(--brand2); margin-bottom:5px; }
+    .debateBox p{ color:var(--muted); font-size:12.5px; line-height:1.6; margin:0; }
+
+    .labBox{
+      background:linear-gradient(135deg,rgba(22,163,74,.07),rgba(22,163,74,.02));
+      border:1px solid rgba(22,163,74,.22); border-left:4px solid var(--green);
+      border-radius:14px; padding:12px 14px; margin-top:10px;
+    }
+    .labBox .ltitle{ font-weight:800; font-size:12.5px; color:var(--green); margin-bottom:5px; }
+    .labBox p{ color:var(--muted); font-size:12.5px; line-height:1.6; margin:0; }
+
+    .stepList{ counter-reset: step; list-style:none; padding:0; margin:8px 0 0 0; }
+    .stepList li{
+      counter-increment: step; display:flex; align-items:flex-start; gap:10px;
+      font-size:12.5px; color:var(--muted); line-height:1.55; margin:6px 0;
+    }
+    .stepList li::before{
+      content:counter(step); min-width:22px; height:22px; border-radius:999px;
+      background:rgba(11,102,195,.12); color:var(--brand2); font-weight:800; font-size:11px;
+      display:flex; align-items:center; justify-content:center; flex-shrink:0; margin-top:1px;
+    }
+
+    @media (max-width:1100px){
+      .slide{ grid-template-columns: 1fr; min-height:unset; }
+      .right{ gap:10px; }
+      .right .media{ min-height:240px; flex:unset; height:240px; }
+      .left{ max-height:unset; overflow:visible; }
+      .actions .pill{ display:none; }
+    }
+    @media (max-width:700px){
+      body{ padding:10px; }
+      .topbar{ padding:10px 12px; gap:8px; }
+      .brand img{ height:30px; }
+      .topcenter{ justify-content:flex-start; flex:unset; }
+      .actions{ gap:6px; }
+      .select{ display:none; }
+      h1{ font-size:22px; }
+      .grid{ grid-template-columns:1fr; }
+      .grid3{ grid-template-columns:1fr; }
+      .slide{ padding:12px; gap:12px; }
+      .deck{ padding:10px; }
+      .controls{ flex-wrap:wrap; gap:8px; }
+      .progressWrap{ order:3; width:100%; padding:0; }
+      .hint{ display:none; }
+    }
+    @media (max-width:480px){
+      .rightBottom{ grid-template-columns:1fr; }
+    }
+  </style>
+</head>
+<body>
+<div class="shell">
+
+  <div class="topbar">
+    <div class="brand">
+      <img id="logo" src="../logo-cenfo.png" alt="Universidad CENFOTEC" onerror="this.style.display='none'"/>
+      <div class="txt">
+        <b id="topTitle">Habilidades del profesional de TI</b>
+        <span id="topSub">A-TI-314 · Semana 4 — Soporte Técnico IV</span>
+      </div>
+    </div>
+
+    <div class="topcenter">
+      <div class="counterPill">
+        <span class="dot"></span>
+        <span id="counterTxt">01 / 20</span>
+      </div>
+    </div>
+
+    <div class="actions">
+      <div class="pill"><span class="miniDot"></span><span>Virtual en vivo</span></div>
+      <div class="pill"><span class="miniDot" style="background:rgba(124,58,237,.7)"></span><span>Defensa del proyecto</span></div>
+      <button class="btn primary" id="penToggle">✏️ Lápiz</button>
+      <button class="btn danger" id="penClear">Borrar</button>
+      <select class="select" id="penSize" title="Grosor">
+        <option value="3">Fino</option>
+        <option value="5" selected>Medio</option>
+        <option value="8">Grueso</option>
+        <option value="12">Extra</option>
+      </select>
+      <select class="select" id="penColor" title="Color">
+        <option value="#0b66c3" selected>Azul</option>
+        <option value="#0f172a">Negro</option>
+        <option value="#dc2626">Rojo</option>
+        <option value="#16a34a">Verde</option>
+        <option value="#f59e0b">Amarillo</option>
+      </select>
+    </div>
+  </div>
+
+  <div class="deck">
+    <canvas id="penCanvas" class="penCanvas"></canvas>
+
+    <div class="slide">
+      <div class="left">
+        <div class="kicker">
+          <div class="bar"></div>
+          <span id="kicker">CURSO</span>
+        </div>
+        <h1 id="title"></h1>
+        <p class="desc" id="desc"></p>
+        <div id="leftBlocks"></div>
+      </div>
+
+      <div class="right">
+        <div class="media">
+          <img id="slideImg" alt=""/>
+          <div class="placeholder" id="placeholder">Imagen de la diapositiva</div>
+        </div>
+        <div class="rightBottom" id="rightBottom"></div>
+      </div>
+    </div>
+
+    <div class="controls">
+      <div class="nav">
+        <button class="btn" id="prevBtn">← Anterior</button>
+        <button class="btn primary" id="nextBtn">Siguiente →</button>
+      </div>
+      <div class="progressWrap">
+        <div class="progressTrack"><div class="progressBar" id="progressBar"></div></div>
+        <div class="hint">Teclas: ← → / Espacio</div>
+      </div>
+    </div>
+  </div>
+
+</div>
+
+<script>
+(function(){
+  function pad2(n){ return String(n).padStart(2,"0"); }
+
+  const slides = [
+  {
+    kicker:"SEMANA 4",
+    title:"Habilidades del profesional de TI",
+    desc:"La tecnica abre la puerta; la actitud profesional y la etica mantienen la confianza del cliente.",
+    leftBlocksHTML:`
+      <div class="bigcard"><div class="title">Mapa de la sesion</div>
+        <div style="color:var(--muted);font-size:13px;line-height:1.7">
+          🗣️ Comunicacion y resolucion<br>🤝 Trato con el cliente<br>
+          📑 Procedimientos operativos<br>⚖️ Etica y legalidad<br>
+          ☎️ Centros de llamadas<br>⌨️ Scripting basico<br>🎤 Defensa del proyecto</div></div>
+      <div class="bigcard green"><div class="title">Hoy ademas</div>
+        <div style="color:var(--muted);font-size:13px;line-height:1.6">
+          Cada grupo presenta su proyecto final: solucion a las brechas de la empresa ficticia (55%).</div></div>`,
+    rightBadges:{ak:"Semana",av:"4 de 4",bk:"Evaluacion",bv:"Defensa 55%"},
+    imgFile:"images/s4-01.svg"
+  },
+  {
+    kicker:"AGENDA",
+    title:"¿Que hacemos hoy?",
+    desc:"Semana 4 · Tema 4 + presentacion final del proyecto.",
+    leftBlocksHTML:`
+      <div class="timerBadge">⏱ Clase 4 · 4 horas</div>
+      <div class="bigcard green"><div class="title">📖 Bloque A — Teoria (20%)</div><ul>
+        <li>Comunicacion y comportamiento profesional</li>
+        <li>Procedimientos operativos</li>
+        <li>Etica, legalidad, mesas de ayuda y scripting</li></ul></div>
+      <div class="bigcard amber"><div class="title">🎤 Bloque B — Defensa del proyecto (60%)</div><ul>
+        <li>Presentacion final de cada grupo</li>
+        <li>Demostracion de la solucion</li>
+        <li>Preguntas y rubrica de 6 criterios</li></ul></div>
+      <div class="bigcard"><div class="title">💬 Bloque C — Cierre (20%)</div><ul>
+        <li>Retroalimentacion final</li><li>Cierre del curso e insignias</li></ul></div>`,
+    rightBadges:{ak:"Defensa",av:"Hoy",bk:"Peso",bv:"55%"},
+    imgFile:"images/s4-02.svg"
+  },
+  {
+    kicker:"COMUNICACION",
+    title:"Habilidades de comunicacion",
+    desc:"Saber resolver no basta: hay que saber escuchar y explicar. Es lo que diferencia a un buen tecnico.",
+    leftBlocksHTML:`
+      <div class="bigcard green"><div class="title">Habilidades blandas</div><ul>
+        <li>Escuchar activamente sin interrumpir</li>
+        <li>Preguntas abiertas y luego cerradas para acotar</li>
+        <li>Explicar sin tecnicismos innecesarios</li>
+        <li>Mantener la calma ante un cliente molesto</li>
+        <li>Confirmar que el problema quedo resuelto</li></ul></div>
+      <div class="debateBox"><div class="dtitle">🗣 Rol (2 min)</div>
+        <p>Un usuario enojado dice que "la computadora no sirve". ¿Cuales son tus primeras 3 frases?</p></div>`,
+    rightBadges:{ak:"Clave",av:"Escucha activa",bk:"Cierre",bv:"Confirmar"},
+    imgFile:"images/s4-03.svg"
+  },
+  {
+    kicker:"CLIENTE",
+    title:"Comportamiento profesional",
+    desc:"El profesionalismo se nota en los detalles del trato con el cliente.",
+    leftBlocksHTML:`
+      <div class="grid">
+        <div class="card"><strong>✅ Si</strong><ul>
+          <li>Puntualidad y presentacion</li>
+          <li>Empatia y respeto</li>
+          <li>Lenguaje claro</li>
+          <li>Cuidar la privacidad del usuario</li></ul></div>
+        <div class="card"><strong>⛔ No</strong><ul>
+          <li>Comer o usar el telefono frente al cliente</li>
+          <li>Juzgar al usuario</li>
+          <li>Compartir datos confidenciales</li>
+          <li>Prometer lo que no se puede cumplir</li></ul></div>
+      </div>
+      <div class="bigcard amber"><div class="title">💡 Netiqueta y soporte remoto</div>
+        <div style="color:var(--muted);font-size:13px;line-height:1.6">
+          En soporte remoto: identificarse, pedir permiso para tomar control, avisar cada accion y
+          cerrar la sesion al terminar.</div></div>`,
+    rightBadges:{ak:"Base",av:"Empatia",bk:"Limite",bv:"Confidencialidad"},
+    imgFile:"images/s4-04.svg"
+  },
+  {
+    kicker:"OPERACION",
+    title:"Procedimientos operativos",
+    desc:"El trabajo del tecnico se sostiene en procesos: documentar, controlar cambios y poder recuperarse.",
+    leftBlocksHTML:`
+      <div class="bigcard"><div class="title">Cuatro pilares</div><ul>
+        <li><b>Documentacion:</b> inventario, manuales y bitacoras de incidentes.</li>
+        <li><b>Gestion de cambios:</b> registrar, aprobar y comunicar todo cambio.</li>
+        <li><b>Prevencion de desastres:</b> respaldos, UPS y redundancia.</li>
+        <li><b>Recuperacion:</b> plan de continuidad y pruebas periodicas.</li></ul></div>
+      <div class="debateBox"><div class="dtitle">🗣 Caso (2 min)</div>
+        <p>Un cambio "rapido" en un servidor dejo a la oficina sin internet. ¿Que paso de la gestion de cambios se salto?</p></div>`,
+    rightBadges:{ak:"Antes de tocar",av:"Documentar",bk:"Plan",bv:"Recuperacion"},
+    imgFile:"images/s4-05.svg"
+  },
+  {
+    kicker:"ETICA",
+    title:"Consideraciones eticas y legales",
+    desc:"El tecnico tiene acceso a informacion sensible. Con ese acceso viene una responsabilidad.",
+    leftBlocksHTML:`
+      <div class="grid">
+        <div class="card"><strong>⚖️ Etica</strong><ul>
+          <li>Confidencialidad de los datos</li>
+          <li>Uso responsable del acceso</li>
+          <li>Honestidad con el cliente</li>
+          <li>No revisar archivos sin permiso</li></ul></div>
+        <div class="card"><strong>📜 Legal</strong><ul>
+          <li>Proteccion de datos personales</li>
+          <li>Licencias de software</li>
+          <li>Cadena de custodia de evidencia</li>
+          <li>Normativa de la organizacion</li></ul></div>
+      </div>
+      <div class="bigcard amber"><div class="title">💡 Regla de oro</div>
+        <div style="color:var(--muted);font-size:13px;line-height:1.6">
+          Si no estarias comodo explicando una accion frente al cliente y a tu jefe, probablemente no debas hacerla.</div></div>`,
+    rightBadges:{ak:"Datos",av:"Confidencial",bk:"Software",bv:"Licenciado"},
+    imgFile:"images/s4-06.svg"
+  },
+  {
+    kicker:"SOPORTE",
+    title:"Centros de llamadas y scripting",
+    desc:"Como se organiza el soporte y como la automatizacion ayuda al tecnico.",
+    leftBlocksHTML:`
+      <div class="grid">
+        <div class="card"><strong>☎️ Nivel 1</strong><ul>
+          <li>Recibe el ticket</li><li>Atiende lo basico</li><li>Escala lo complejo</li></ul></div>
+        <div class="card"><strong>🛠️ Nivel 2</strong><ul>
+          <li>Mayor experiencia</li><li>Incidentes avanzados</li><li>Soporte al nivel 1</li></ul></div>
+      </div>
+      <div class="bigcard"><div class="title">⌨️ Secuencias de comandos (scripting)</div><ul>
+        <li>Automatizan tareas repetitivas (respaldos, limpieza, despliegues)</li>
+        <li>Lenguajes: <code>Batch</code>, <code>PowerShell</code>, <code>Bash</code>, <code>Python</code></li>
+        <li>Variables, condicionales y bucles como base</li>
+        <li>Probar siempre en un entorno controlado antes de produccion</li></ul></div>`,
+    rightBadges:{ak:"Primer contacto",av:"Nivel 1",bk:"Windows",bv:"PowerShell"},
+    imgFile:"images/s4-07.svg"
+  },
+  {
+    kicker:"DEFENSA",
+    title:"Presentacion final del proyecto",
+    desc:"Cada grupo presenta su solucion a las brechas de seguridad de la empresa ficticia.",
+    leftBlocksHTML:`
+      <div class="bigcard"><div class="title">Estructura sugerida (10 min)</div>
+        <ol class="stepList">
+          <li>Contexto: la empresa y las brechas detectadas.</li>
+          <li>Solucion propuesta por cada brecha.</li>
+          <li>Demostracion de la maquina virtual endurecida.</li>
+          <li>Resultados: antes y despues.</li>
+          <li>Preguntas del docente y la clase.</li>
+        </ol></div>
+      <div class="bigcard green"><div class="title">💡 Consejos</div><ul>
+        <li>Repartir la exposicion entre el grupo</li>
+        <li>Mostrar evidencias concretas</li>
+        <li>Hablar claro y sin tecnicismos vacios</li>
+        <li>Tener la VM lista antes de empezar</li></ul></div>`,
+    rightBadges:{ak:"Tiempo",av:"~10 min",bk:"Modo",bv:"Demo en vivo"},
+    imgFile:"images/s4-08.svg"
+  },
+  {
+    kicker:"RUBRICA",
+    title:"Rubrica del proyecto (55%)",
+    desc:"Los seis criterios con los que se evalua el proyecto, escala 1–10.",
+    leftBlocksHTML:`
+      <div class="bigcard amber"><div class="title">Criterios</div>
+        <div style="overflow-x:auto;margin-top:8px">
+          <table style="width:100%;border-collapse:collapse;font-size:12px;color:var(--muted)">
+            <thead><tr style="background:rgba(217,119,6,.12);color:#d97706">
+              <th style="padding:6px 8px;text-align:left">#</th>
+              <th style="padding:6px 8px;text-align:left">Criterio</th>
+              <th style="padding:6px 8px;text-align:left">Escala</th></tr></thead>
+            <tbody>
+              <tr style="border-bottom:1px solid var(--stroke)"><td style="padding:5px 8px">1</td><td>Definicion de los requerimientos</td><td>1–10</td></tr>
+              <tr style="border-bottom:1px solid var(--stroke)"><td style="padding:5px 8px">2</td><td>Uso de la imagen de Windows</td><td>1–10</td></tr>
+              <tr style="border-bottom:1px solid var(--stroke)"><td style="padding:5px 8px">3</td><td>Configuracion de la maquina virtual</td><td>1–10</td></tr>
+              <tr style="border-bottom:1px solid var(--stroke)"><td style="padding:5px 8px">4</td><td>Instalacion del sistema operativo</td><td>1–10</td></tr>
+              <tr style="border-bottom:1px solid var(--stroke)"><td style="padding:5px 8px">5</td><td>Configuracion de las herramientas de Windows</td><td>1–10</td></tr>
+              <tr><td style="padding:5px 8px">6</td><td>Instalacion de la impresora</td><td>1–10</td></tr>
+            </tbody></table></div></div>
+      <div style="color:var(--muted);font-size:12px;margin-top:8px">1–3 Insatisfactoria · 4–6 Aceptable · 7–10 Satisfactoria</div>`,
+    rightBadges:{ak:"Criterios",av:"6",bk:"Escala",bv:"1–10"},
+    imgFile:"images/s4-09.svg"
+  },
+  {
+    kicker:"CIERRE DEL CURSO",
+    title:"Cierre de A-TI-314",
+    desc:"Terminamos el curso. Entrega de notas, cierre y tramite de insignias digitales.",
+    leftBlocksHTML:`
+      <div class="bigcard green"><div class="title">✅ Lo que logramos en el curso</div><ul>
+        <li>Seguridad en sistemas operativos (movil, Linux, macOS)</li>
+        <li>Procedimientos de seguridad y endurecimiento</li>
+        <li>Resolucion de incidentes, WiFi y firewall</li>
+        <li>Habilidades profesionales del tecnico de TI</li>
+        <li>Proyecto integrador defendido en clase</li></ul></div>
+      <div class="bigcard"><div class="title">🎓 Semana 5</div>
+        <div style="color:var(--muted);font-size:13px;line-height:1.6">
+          Entrega de notas, cierre del curso y tramite de insignias digitales.</div></div>
+      <div class="bigcard purple"><div class="title">¡Gracias por el esfuerzo!</div>
+        <div style="color:var(--muted);font-size:13px;line-height:1.6">
+          Sigan practicando: la seguridad es un habito, no un evento.</div></div>`,
+    rightBadges:{ak:"Curso",av:"Completado",bk:"Siguiente",bv:"Insignias"},
+    imgFile:"images/s4-10.svg"
+  }
+]; // fin slides
+
+  const elCounter   = document.getElementById("counterTxt");
+  const elKicker    = document.getElementById("kicker");
+  const elTitle     = document.getElementById("title");
+  const elDesc      = document.getElementById("desc");
+  const elLeft      = document.getElementById("leftBlocks");
+  const elRightBot  = document.getElementById("rightBottom");
+  const elImg       = document.getElementById("slideImg");
+  const elPh        = document.getElementById("placeholder");
+  const elProgress  = document.getElementById("progressBar");
+  const prevBtn     = document.getElementById("prevBtn");
+  const nextBtn     = document.getElementById("nextBtn");
+  const topTitle    = document.getElementById("topTitle");
+  const topSub      = document.getElementById("topSub");
+
+  function setSlideImage(src){
+    if(!src){ elImg.style.display="none"; elPh.style.display="block"; return; }
+    elImg.style.display="none"; elPh.style.display="block";
+    elImg.src=src;
+    elImg.onload=()=>{ elImg.style.display="block"; elPh.style.display="none"; };
+    elImg.onerror=()=>{ elImg.style.display="none"; elPh.textContent="Imagen: "+src; };
+  }
+
+  function renderBadges(b){
+    elRightBot.innerHTML="";
+    const mk=(label,value)=>{
+      const d=document.createElement("div");
+      d.className="miniCard";
+      d.innerHTML=`<div class="label">${label}</div><div class="value">${value}</div>`;
+      return d;
+    };
+    if(b && b.ak) elRightBot.appendChild(mk(b.ak,b.av||""));
+    if(b && b.bk) elRightBot.appendChild(mk(b.bk,b.bv||""));
+  }
+
+  function wireReveal(){
+    document.querySelectorAll("[data-reveal]").forEach(btn=>{
+      btn.onclick=()=>{ const el=document.getElementById(btn.dataset.reveal); if(el) el.style.display="block"; };
+    });
+    document.querySelectorAll("[data-hide]").forEach(btn=>{
+      btn.onclick=()=>{ const el=document.getElementById(btn.dataset.hide); if(el) el.style.display="none"; };
+    });
+  }
+
+  let idx=0;
+  function render(){
+    const s=slides[idx];
+    elCounter.textContent=`${pad2(idx+1)} / ${pad2(slides.length)}`;
+    elKicker.textContent=s.kicker||"";
+    elTitle.textContent=s.title||"";
+    elDesc.textContent=s.desc||"";
+    topTitle.textContent=s.topTitle||"Habilidades del profesional de TI";
+    topSub.textContent=s.topSub||"A-TI-314 · Semana 4 — Soporte Técnico IV";
+    elLeft.innerHTML=s.leftBlocksHTML||"";
+    renderBadges(s.rightBadges||null);
+    setSlideImage(s.imgFile||"");
+    elProgress.style.width=(((idx+1)/slides.length)*100)+"%";
+    wireReveal();
+    clearPen();
+    document.querySelector(".left").scrollTop=0;
+  }
+
+  function next(){ if(idx<slides.length-1){idx++;render();} }
+  function prev(){ if(idx>0){idx--;render();} }
+
+  nextBtn.addEventListener("click",next);
+  prevBtn.addEventListener("click",prev);
+  window.addEventListener("keydown",e=>{
+    if(e.key==="ArrowRight"||e.key===" "){ e.preventDefault(); next(); }
+    if(e.key==="ArrowLeft"){ e.preventDefault(); prev(); }
+  });
+
+  const canvas    = document.getElementById("penCanvas");
+  const penToggle = document.getElementById("penToggle");
+  const penClear  = document.getElementById("penClear");
+  const penSize   = document.getElementById("penSize");
+  const penColor  = document.getElementById("penColor");
+
+  let penOn=false, drawing=false, last={x:0,y:0};
+
+  function resizeCanvas(){
+    const deck=document.querySelector(".deck");
+    const r=deck.getBoundingClientRect();
+    const dpr=window.devicePixelRatio||1;
+    canvas.width=Math.floor(r.width*dpr);
+    canvas.height=Math.floor(r.height*dpr);
+    canvas.style.width=r.width+"px";
+    canvas.style.height=r.height+"px";
+    canvas.getContext("2d").setTransform(dpr,0,0,dpr,0,0);
+  }
+  window.addEventListener("resize",resizeCanvas);
+
+  function getPos(ev){
+    const r=document.querySelector(".deck").getBoundingClientRect();
+    const src=ev.touches?ev.touches[0]:ev;
+    return {x:src.clientX-r.left, y:src.clientY-r.top};
+  }
+  function drawLine(a,b){
+    const ctx=canvas.getContext("2d");
+    ctx.lineCap="round"; ctx.lineJoin="round";
+    ctx.strokeStyle=penColor.value;
+    ctx.lineWidth=Number(penSize.value);
+    ctx.beginPath(); ctx.moveTo(a.x,a.y); ctx.lineTo(b.x,b.y); ctx.stroke();
+  }
+  function clearPen(){
+    const ctx=canvas.getContext("2d");
+    ctx.clearRect(0,0,canvas.width,canvas.height);
+  }
+
+  const deck=document.querySelector(".deck");
+  deck.addEventListener("mousedown",e=>{ if(!penOn)return; drawing=true; last=getPos(e); e.preventDefault(); });
+  deck.addEventListener("mousemove",e=>{ if(!penOn||!drawing)return; const p=getPos(e); drawLine(last,p); last=p; e.preventDefault(); });
+  window.addEventListener("mouseup",()=>{ drawing=false; });
+  deck.addEventListener("touchstart",e=>{ if(!penOn)return; drawing=true; last=getPos(e); e.preventDefault(); },{passive:false});
+  deck.addEventListener("touchmove",e=>{ if(!penOn||!drawing)return; const p=getPos(e); drawLine(last,p); last=p; e.preventDefault(); },{passive:false});
+  window.addEventListener("touchend",()=>{ drawing=false; });
+
+  penToggle.addEventListener("click",()=>{
+    penOn=!penOn;
+    canvas.style.pointerEvents=penOn?"auto":"none";
+    penToggle.classList.toggle("on",penOn);
+    penToggle.textContent=penOn?"✏️ Activo":"✏️ Lápiz";
+  });
+  penClear.addEventListener("click",()=>clearPen());
+
+  resizeCanvas();
+  render();
+
+})();
+</script>
+</body>
+</html>

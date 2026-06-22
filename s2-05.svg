@@ -1,0 +1,13 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 520 360">
+<defs><linearGradient id="g" x1="0" y1="0" x2="1" y2="1">
+<stop offset="0" stop-color="#0b66c3"/><stop offset="1" stop-color="#0ea5e9"/></linearGradient></defs>
+<rect width="520" height="360" rx="18" fill="#eaf1f8"/>
+
+<rect x="120" y="92" width="280" height="176" rx="14" fill="#0f172a"/>
+<rect x="120" y="92" width="280" height="34" rx="14" fill="#1e293b"/>
+<circle cx="142" cy="109" r="6" fill="#ef4444"/><circle cx="162" cy="109" r="6" fill="#f59e0b"/><circle cx="182" cy="109" r="6" fill="#16a34a"/>
+<text x="140" y="170" font-family="monospace" font-size="15" fill="#16a34a">$ sudo secpol.msc</text>
+<text x="140" y="198" font-family="monospace" font-size="15" fill="#0ea5e9">&gt; aplicando politica...</text>
+<text x="140" y="226" font-family="monospace" font-size="15" fill="#e2e8f0">&gt; OK_</text>
+<text x="260" y="300" text-anchor="middle" font-family="sans-serif" font-size="18" font-weight="700" fill="#0a4f96">Laboratorio práctico</text>
+</svg>

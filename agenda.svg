@@ -1,0 +1,10 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 520 360">
+<defs><linearGradient id="g" x1="0" y1="0" x2="1" y2="1">
+<stop offset="0" stop-color="#0b66c3"/><stop offset="1" stop-color="#0ea5e9"/></linearGradient></defs>
+<rect width="520" height="360" rx="18" fill="#eaf1f8"/>
+
+<circle cx="260" cy="150" r="92" fill="url(#g)" opacity="0.12"/>
+<path d="M196 96 v150" stroke="#0a4f96" stroke-width="8" stroke-linecap="round"/>
+<path d="M204 100 h110 l-22 30 l22 30 h-110 z" fill="url(#g)"/>
+<text x="260" y="300" text-anchor="middle" font-family="sans-serif" font-size="18" font-weight="700" fill="#0a4f96">Cierre y siguientes pasos</text>
+</svg>

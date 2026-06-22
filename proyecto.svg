@@ -1,0 +1,11 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 520 360">
+<defs><linearGradient id="g" x1="0" y1="0" x2="1" y2="1">
+<stop offset="0" stop-color="#0b66c3"/><stop offset="1" stop-color="#0ea5e9"/></linearGradient></defs>
+<rect width="520" height="360" rx="18" fill="#eaf1f8"/>
+
+<circle cx="260" cy="150" r="96" fill="url(#g)" opacity="0.12"/>
+<path d="M260 70 l64 26 v44 c0 52 -34 84 -64 100 c-30 -16 -64 -48 -64 -100 v-44 z" fill="url(#g)"/>
+<rect x="238" y="138" width="44" height="40" rx="7" fill="#fff"/>
+<path d="M248 138 v-12 a12 12 0 0 1 24 0 v12" fill="none" stroke="#fff" stroke-width="6"/>
+<text x="260" y="300" text-anchor="middle" font-family="sans-serif" font-size="22" font-weight="800" fill="#0a4f96">Seguridad Informática</text>
+</svg>
