@@ -1,0 +1,263 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8"/>
+  <meta name="viewport" content="width=device-width,initial-scale=1"/>
+  <title>A-TI-314 · Caso Práctico 1 — Seguridad en sistemas operativos</title>
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800;900&display=swap');
+    :root{
+      --brand:#0b66c3; --brand2:#0a4f96; --accent:#0ea5e9;
+      --green:#16a34a; --amber:#d97706; --red:#dc2626; --purple:#7c3aed;
+      --text:#0f172a; --muted:#50607a; --stroke:#cfd9e6; --stroke2:#b9c8da;
+    }
+    *{box-sizing:border-box}
+    body{
+      margin:0; font-family:'Plus Jakarta Sans',ui-sans-serif,system-ui,sans-serif;
+      color:var(--text);
+      background: radial-gradient(900px 500px at 20% 10%,#ffffff,rgba(255,255,255,0) 60%),
+                  radial-gradient(800px 450px at 80% 70%,#ffffff,rgba(255,255,255,0) 55%),
+                  linear-gradient(160deg,#eaf1f8,#cfdceb);
+      min-height:100vh; padding:24px 16px;
+    }
+    .shell{ max-width:900px; margin:0 auto; }
+    .header{
+      background:linear-gradient(135deg,rgba(11,102,195,.12),rgba(14,165,233,.06));
+      border:1px solid rgba(11,102,195,.22); border-radius:20px;
+      padding:24px 28px; margin-bottom:20px; display:flex; align-items:center; gap:20px;
+    }
+    .header img{ height:44px; width:auto; }
+    .header .htxt{ flex:1; }
+    .header .htxt .tag{ font-size:11px; font-weight:800; color:var(--brand2); text-transform:uppercase; letter-spacing:.5px; margin-bottom:4px; }
+    .header .htxt h1{ margin:0 0 4px; font-size:22px; letter-spacing:-.4px; line-height:1.1; }
+    .header .htxt p{ margin:0; color:var(--muted); font-size:13px; line-height:1.5; }
+    .badge{ background:rgba(11,102,195,.10); border:1px solid rgba(11,102,195,.22); border-radius:10px; padding:10px 14px; text-align:center; flex-shrink:0; }
+    .badge .bv{ font-size:22px; font-weight:900; color:var(--brand2); letter-spacing:-.4px; }
+    .badge .bl{ font-size:10px; color:var(--muted); font-weight:600; }
+    .meta{ display:flex; flex-wrap:wrap; gap:8px; margin-bottom:20px; }
+    .pill{
+      display:inline-flex; align-items:center; gap:6px; padding:6px 12px;
+      border-radius:999px; border:1px solid var(--stroke); background:rgba(255,255,255,.7);
+      font-size:12px; font-weight:600; color:var(--muted);
+    }
+    .pill.green{ border-color:rgba(22,163,74,.3); background:rgba(22,163,74,.08); color:#15803d; }
+    .pill.amber{ border-color:rgba(217,119,6,.3); background:rgba(217,119,6,.08); color:#b45309; }
+    .pill.red{ border-color:rgba(220,38,38,.25); background:rgba(220,38,38,.07); color:#b91c1c; }
+    .card{
+      background:rgba(255,255,255,.72); border:1px solid var(--stroke);
+      border-radius:16px; padding:20px 22px; margin-bottom:16px;
+    }
+    .card h2{ margin:0 0 12px; font-size:15px; color:var(--brand2); display:flex; align-items:center; gap:8px; }
+    .card h2 .icon{ font-size:18px; }
+    .card p{ margin:0 0 8px; color:var(--muted); font-size:13.5px; line-height:1.65; }
+    .card p:last-child{ margin-bottom:0; }
+    .card ul, .card ol{ margin:8px 0 0; padding-left:18px; color:var(--muted); font-size:13.5px; line-height:1.7; }
+    .card li{ margin:4px 0; }
+    .card.green{ border-color:rgba(22,163,74,.28); background:rgba(22,163,74,.06); }
+    .card.green h2{ color:var(--green); }
+    .card.amber{ border-color:rgba(217,119,6,.28); background:rgba(217,119,6,.06); }
+    .card.amber h2{ color:var(--amber); }
+    .card.red{ border-color:rgba(220,38,38,.22); background:rgba(220,38,38,.05); }
+    .card.red h2{ color:var(--red); }
+    .card.purple{ border-color:rgba(124,58,237,.22); background:rgba(124,58,237,.05); }
+    .card.purple h2{ color:var(--purple); }
+    .steps{ list-style:none; padding:0; margin:10px 0 0; counter-reset:step; }
+    .steps li{
+      counter-increment:step; display:flex; align-items:flex-start; gap:12px;
+      font-size:13.5px; color:var(--muted); line-height:1.6; margin:10px 0;
+    }
+    .steps li::before{
+      content:counter(step); min-width:26px; height:26px; border-radius:999px;
+      background:rgba(11,102,195,.12); color:var(--brand2); font-weight:800; font-size:12px;
+      display:flex; align-items:center; justify-content:center; flex-shrink:0; margin-top:2px;
+    }
+    .steps li b{ color:var(--text); }
+    code{ background:rgba(15,23,42,.06); padding:2px 6px; border-radius:5px; font-size:12px; font-family:monospace; color:var(--brand2); }
+    .tbl{ width:100%; border-collapse:collapse; font-size:13px; margin-top:10px; }
+    .tbl th{ background:rgba(11,102,195,.10); color:var(--brand2); padding:8px 12px; text-align:left; font-weight:700; }
+    .tbl th:first-child{ border-radius:8px 0 0 8px; }
+    .tbl th:last-child{ border-radius:0 8px 8px 0; }
+    .tbl td{ padding:7px 12px; color:var(--muted); border-bottom:1px solid var(--stroke); }
+    .tbl tr:last-child td{ border-bottom:none; }
+    .rubric-item{
+      display:flex; align-items:center; gap:12px; padding:12px 16px;
+      background:rgba(255,255,255,.6); border:1px solid var(--stroke);
+      border-radius:12px; margin:8px 0;
+    }
+    .rubric-num{ font-size:11px; font-weight:800; color:var(--brand2); min-width:22px; }
+    .rubric-text{ flex:1; font-size:13px; color:var(--text); }
+    .rubric-score{ display:flex; gap:3px; align-items:center; }
+    .rubric-score span{
+      width:20px; height:20px; border-radius:4px; background:rgba(11,102,195,.08);
+      border:1px solid rgba(11,102,195,.15); font-size:9px; font-weight:700;
+      color:var(--muted); display:flex; align-items:center; justify-content:center;
+    }
+    .alert{
+      border-left:4px solid var(--amber); background:rgba(217,119,6,.07);
+      border-radius:0 12px 12px 0; padding:12px 16px; margin-top:12px;
+    }
+    .alert .atitle{ font-weight:800; font-size:12.5px; color:var(--amber); margin-bottom:4px; }
+    .alert p{ margin:0; font-size:13px; color:var(--muted); line-height:1.6; }
+    .info{
+      border-left:4px solid var(--brand); background:rgba(11,102,195,.06);
+      border-radius:0 12px 12px 0; padding:12px 16px; margin-top:12px;
+    }
+    .info .ititle{ font-weight:800; font-size:12.5px; color:var(--brand2); margin-bottom:4px; }
+    .info p{ margin:0; font-size:13px; color:var(--muted); line-height:1.6; }
+    .g2{ display:grid; grid-template-columns:1fr 1fr; gap:14px; }
+    @media(max-width:640px){ .g2{ grid-template-columns:1fr; } }
+    .footer{
+      margin-top:28px; padding:16px 22px;
+      background:rgba(255,255,255,.5); border:1px solid var(--stroke);
+      border-radius:14px; display:flex; justify-content:space-between; align-items:center;
+      flex-wrap:wrap; gap:10px; font-size:12px; color:var(--muted);
+    }
+    @media print{ body{ background:white; padding:0; } .shell{ max-width:100%; } }
+</style>
+</head>
+<body>
+<div class="shell">
+
+  <div class="header">
+    <img src="../logo-cenfo.png" alt="CENFOTEC" onerror="this.style.display='none'"/>
+    <div class="htxt">
+      <div class="tag">A-TI-314 · Soporte Técnico IV · Semana 1</div>
+      <h1>Caso Práctico 1 — Seguridad en sistemas operativos</h1>
+      <p>Aseguramiento de dispositivos móviles, Linux y macOS: bloqueos, biometría, cifrado y comandos de la CLI.</p>
+    </div>
+    <div class="badge"><div class="bv">15%</div><div class="bl">del total</div></div>
+  </div>
+
+  <div class="meta"><span class="pill">📋 Tipo: Desempeño</span><span class="pill amber">⏱ En clase · supervisado</span><span class="pill green">👥 Grupos: 3–4 estudiantes</span><span class="pill">🔧 Móvil + Linux + macOS (o VM)</span><span class="pill red">📷 Evidencia: capturas obligatorias</span></div>
+
+
+  <div class="card">
+    <h2><span class="icon">📌</span> Descripción del caso</h2>
+    <p>Un colaborador de la empresa <b>SeguraTI S.A.</b> usa su <b>teléfono</b>, una laptop con <b>Linux</b> y una
+       <b>Mac</b> para tareas de trabajo, todos sin medidas de seguridad. El equipo técnico debe proponer y aplicar
+       la <b>configuración mínima de seguridad</b> para cada sistema operativo y documentar el proceso.</p>
+    <div class="info">
+      <div class="ititle">💡 Nota para el docente</div>
+      <p>Trabajen sobre dispositivos o máquinas virtuales de prueba. Documenten cada cambio con captura o anotación:
+      la rúbrica valora la <b>solución detallada</b> del caso.</p>
+    </div>
+  </div>
+
+  <div class="card">
+    <h2><span class="icon">⚙️</span> Sistemas a asegurar</h2>
+    <table class="tbl">
+      <thead><tr><th>Sistema</th><th>Estado inicial</th><th>Objetivo de seguridad</th></tr></thead>
+      <tbody>
+        <tr><td>Teléfono móvil</td><td>Sin bloqueo, nube sin 2FA</td><td>Bloqueo + biometría + 2FA + cifrado</td></tr>
+        <tr><td>Laptop Linux</td><td>Único usuario administrador</td><td>Usuario estándar + sudo + firewall</td></tr>
+        <tr><td>Mac (macOS)</td><td>Sin cifrado ni actualizaciones</td><td>FileVault + firewall + actualizaciones</td></tr>
+      </tbody>
+    </table>
+    <div class="alert">
+      <div class="atitle">⚠️ Antes de empezar</div>
+      <p>Trabajen con cuentas de prueba. Nunca usen credenciales personales reales en un equipo compartido de laboratorio.</p>
+    </div>
+  </div>
+
+  <div class="card green">
+    <h2><span class="icon">📱</span> Parte 1 — Asegurar el dispositivo móvil</h2>
+    <ol class="steps">
+      <li>Activar el <b>bloqueo de pantalla</b> con PIN de 6 o más dígitos (no fechas ni 1234).</li>
+      <li>Configurar la <b>biometría</b> (huella o rostro) con el PIN como respaldo.</li>
+      <li>Activar la <b>verificación en dos pasos (2FA)</b> en la cuenta principal del dispositivo.</li>
+      <li>Verificar que el <b>cifrado</b> del almacenamiento esté activo.</li>
+      <li>Configurar el <b>bloqueo automático</b> por inactividad (30–60 s) y ocultar el contenido de las notificaciones.</li>
+      <li>📷 <b>Captura 1:</b> pantalla de seguridad con bloqueo y biometría configurados.</li>
+    </ol>
+  </div>
+
+  <div class="card amber">
+    <h2><span class="icon">🐧</span> Parte 2 — Endurecer Linux</h2>
+    <ol class="steps">
+      <li>Crear un usuario estándar: <code>sudo adduser tecnico</code>.</li>
+      <li>Reservar la cuenta de administrador y usar <code>sudo</code> solo cuando se necesita.</li>
+      <li>Revisar permisos de un archivo sensible con <code>ls -l</code> y ajustarlos: <code>chmod 640 archivo</code>.</li>
+      <li>Corregir el propietario si corresponde: <code>sudo chown usuario:grupo archivo</code>.</li>
+      <li>Activar el firewall: <code>sudo ufw enable</code> y verificar con <code>sudo ufw status</code>.</li>
+      <li>Actualizar el sistema: <code>sudo apt update && sudo apt upgrade</code>.</li>
+      <li>📷 <b>Captura 2:</b> salida de <code>ufw status</code> y permisos del archivo.</li>
+    </ol>
+  </div>
+
+  <div class="card red">
+    <h2><span class="icon">🍏</span> Parte 3 — Asegurar macOS y verificar</h2>
+    <ol class="steps">
+      <li>Activar <b>FileVault</b>: Preferencias del Sistema → Seguridad y privacidad → FileVault → Activar.</li>
+      <li>Activar el <b>firewall</b> de aplicaciones.</li>
+      <li>Activar las <b>actualizaciones automáticas</b> del sistema.</li>
+      <li>Revisar los <b>permisos de privacidad</b> por aplicación.</li>
+      <li>Verificar que los tres sistemas siguen funcionales tras los cambios.</li>
+      <li>📷 <b>Captura 3:</b> FileVault activo y firewall encendido.</li>
+    </ol>
+    <div class="alert">
+      <div class="atitle">⚠️ Escenario adicional (si terminan antes)</div>
+      <p>Configuren el <b>borrado remoto</b> y la localización del dispositivo móvil, y prueben la función desde la web de la cuenta.</p>
+    </div>
+  </div>
+
+  <div class="card purple">
+    <h2><span class="icon">📄</span> Entregable del caso</h2>
+    <p>El informe debe entregarse en formato <b>PDF o DOCX</b> y contener lo siguiente:</p>
+    <div class="g2">
+      <ul>
+        <li>Portada con nombres completos y número de grupo</li>
+        <li>Tabla de sistemas con los ajustes aplicados</li>
+        <li>Captura 1: seguridad del móvil</li>
+        <li>Captura 2: firewall y permisos en Linux</li>
+        <li>Captura 3: FileVault y firewall en macOS</li>
+      </ul>
+      <ul>
+        <li>Justificación de por qué cada medida protege los datos</li>
+        <li>Diferencia entre cifrado de disco y contraseña de inicio</li>
+        <li>3 problemas encontrados y sus soluciones</li>
+        <li>Conclusiones técnicas (mínimo 150 palabras)</li>
+        <li>Recomendación para un entorno de producción</li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="card">
+    <h2><span class="icon">📊</span> Rúbrica de evaluación — escala 1–10</h2>
+    <p style="font-size:12px;color:var(--muted);margin-bottom:12px">1–3 Insatisfactoria · 4–6 Aceptable · 7–10 Satisfactoria</p>
+    <div class="rubric-item">
+      <div class="rubric-num">1</div>
+      <div class="rubric-text"><b>Definición de los requerimientos del ejercicio</b><br><span style="font-size:12px;color:var(--muted)">Define el estado inicial de cada sistema y la configuración de seguridad requerida.</span></div>
+      <div class="rubric-score"><span>1</span><span>2</span><span>3</span><span>4</span><span>5</span><span>6</span><span>7</span><span>8</span><span>9</span><span>10</span></div>
+    </div>
+    <div class="rubric-item">
+      <div class="rubric-num">2</div>
+      <div class="rubric-text"><b>Selección de la solución del ejercicio</b><br><span style="font-size:12px;color:var(--muted)">Elige las medidas adecuadas por sistema (bloqueo, 2FA, cifrado, firewall, privilegio mínimo).</span></div>
+      <div class="rubric-score"><span>1</span><span>2</span><span>3</span><span>4</span><span>5</span><span>6</span><span>7</span><span>8</span><span>9</span><span>10</span></div>
+    </div>
+    <div class="rubric-item">
+      <div class="rubric-num">3</div>
+      <div class="rubric-text"><b>Uso de las técnicas de seguridad</b><br><span style="font-size:12px;color:var(--muted)">Aplica correctamente las técnicas: biometría, FileVault, sudo, permisos y ufw.</span></div>
+      <div class="rubric-score"><span>1</span><span>2</span><span>3</span><span>4</span><span>5</span><span>6</span><span>7</span><span>8</span><span>9</span><span>10</span></div>
+    </div>
+    <div class="rubric-item">
+      <div class="rubric-num">4</div>
+      <div class="rubric-text"><b>Solución detallada del caso</b><br><span style="font-size:12px;color:var(--muted)">Documenta el proceso con capturas y justifica cada medida de forma clara.</span></div>
+      <div class="rubric-score"><span>1</span><span>2</span><span>3</span><span>4</span><span>5</span><span>6</span><span>7</span><span>8</span><span>9</span><span>10</span></div>
+    </div>
+    <div style="margin-top:12px;padding:10px 14px;background:rgba(11,102,195,.06);border-radius:10px;font-size:13px;color:var(--brand2);font-weight:600">
+      Nota final del caso = Promedio de los 4 criterios (escala 1–10)
+    </div>
+  </div>
+  <div class="card">
+    <h2><span class="icon">🗣️</span> Preguntas de discusión para la retroalimentación</h2>
+    <ol style="margin:0;padding-left:18px;color:var(--muted);font-size:13.5px;line-height:1.8"><li>¿Por qué conviene trabajar con una cuenta estándar y elevar privilegios con sudo solo cuando se necesita?</li><li>¿Qué riesgo agrega la sincronización en la nube y cómo se mitiga?</li><li>¿En qué se diferencia el cifrado de disco (FileVault / LUKS) de una simple contraseña de inicio?</li><li>¿Qué harían si el usuario pierde el dispositivo móvil con datos del trabajo?</li><li>¿Por qué la biometría siempre se acompaña de un PIN de respaldo?</li></ol>
+  </div>
+
+  <div class="footer">
+    <span>A-TI-314 · Introducción al Soporte Técnico IV · Universidad CENFOTEC</span>
+    <span>Semana 1 · Caso Práctico 1 · Ing. Jeremy Alvarado B.</span>
+  </div>
+
+</div>
+</body>
+</html>

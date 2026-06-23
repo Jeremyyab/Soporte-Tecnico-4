@@ -1,0 +1,233 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8"/>
+  <meta name="viewport" content="width=device-width,initial-scale=1"/>
+  <title>A-TI-314 · Proyecto Final — Brechas de seguridad</title>
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800;900&display=swap');
+    :root{
+      --brand:#0b66c3; --brand2:#0a4f96; --accent:#0ea5e9;
+      --green:#16a34a; --amber:#d97706; --red:#dc2626; --purple:#7c3aed;
+      --text:#0f172a; --muted:#50607a; --stroke:#cfd9e6; --stroke2:#b9c8da;
+    }
+    *{box-sizing:border-box}
+    body{
+      margin:0; font-family:'Plus Jakarta Sans',ui-sans-serif,system-ui,sans-serif;
+      color:var(--text);
+      background: radial-gradient(900px 500px at 20% 10%,#ffffff,rgba(255,255,255,0) 60%),
+                  radial-gradient(800px 450px at 80% 70%,#ffffff,rgba(255,255,255,0) 55%),
+                  linear-gradient(160deg,#eaf1f8,#cfdceb);
+      min-height:100vh; padding:24px 16px;
+    }
+    .shell{ max-width:900px; margin:0 auto; }
+    .header{
+      background:linear-gradient(135deg,rgba(11,102,195,.12),rgba(14,165,233,.06));
+      border:1px solid rgba(11,102,195,.22); border-radius:20px;
+      padding:24px 28px; margin-bottom:20px; display:flex; align-items:center; gap:20px;
+    }
+    .header img{ height:44px; width:auto; }
+    .header .htxt{ flex:1; }
+    .header .htxt .tag{ font-size:11px; font-weight:800; color:var(--brand2); text-transform:uppercase; letter-spacing:.5px; margin-bottom:4px; }
+    .header .htxt h1{ margin:0 0 4px; font-size:22px; letter-spacing:-.4px; line-height:1.1; }
+    .header .htxt p{ margin:0; color:var(--muted); font-size:13px; line-height:1.5; }
+    .badge{ background:rgba(11,102,195,.10); border:1px solid rgba(11,102,195,.22); border-radius:10px; padding:10px 14px; text-align:center; flex-shrink:0; }
+    .badge .bv{ font-size:22px; font-weight:900; color:var(--brand2); letter-spacing:-.4px; }
+    .badge .bl{ font-size:10px; color:var(--muted); font-weight:600; }
+    .meta{ display:flex; flex-wrap:wrap; gap:8px; margin-bottom:20px; }
+    .pill{
+      display:inline-flex; align-items:center; gap:6px; padding:6px 12px;
+      border-radius:999px; border:1px solid var(--stroke); background:rgba(255,255,255,.7);
+      font-size:12px; font-weight:600; color:var(--muted);
+    }
+    .pill.green{ border-color:rgba(22,163,74,.3); background:rgba(22,163,74,.08); color:#15803d; }
+    .pill.amber{ border-color:rgba(217,119,6,.3); background:rgba(217,119,6,.08); color:#b45309; }
+    .pill.red{ border-color:rgba(220,38,38,.25); background:rgba(220,38,38,.07); color:#b91c1c; }
+    .card{
+      background:rgba(255,255,255,.72); border:1px solid var(--stroke);
+      border-radius:16px; padding:20px 22px; margin-bottom:16px;
+    }
+    .card h2{ margin:0 0 12px; font-size:15px; color:var(--brand2); display:flex; align-items:center; gap:8px; }
+    .card h2 .icon{ font-size:18px; }
+    .card p{ margin:0 0 8px; color:var(--muted); font-size:13.5px; line-height:1.65; }
+    .card p:last-child{ margin-bottom:0; }
+    .card ul, .card ol{ margin:8px 0 0; padding-left:18px; color:var(--muted); font-size:13.5px; line-height:1.7; }
+    .card li{ margin:4px 0; }
+    .card.green{ border-color:rgba(22,163,74,.28); background:rgba(22,163,74,.06); }
+    .card.green h2{ color:var(--green); }
+    .card.amber{ border-color:rgba(217,119,6,.28); background:rgba(217,119,6,.06); }
+    .card.amber h2{ color:var(--amber); }
+    .card.red{ border-color:rgba(220,38,38,.22); background:rgba(220,38,38,.05); }
+    .card.red h2{ color:var(--red); }
+    .card.purple{ border-color:rgba(124,58,237,.22); background:rgba(124,58,237,.05); }
+    .card.purple h2{ color:var(--purple); }
+    .steps{ list-style:none; padding:0; margin:10px 0 0; counter-reset:step; }
+    .steps li{
+      counter-increment:step; display:flex; align-items:flex-start; gap:12px;
+      font-size:13.5px; color:var(--muted); line-height:1.6; margin:10px 0;
+    }
+    .steps li::before{
+      content:counter(step); min-width:26px; height:26px; border-radius:999px;
+      background:rgba(11,102,195,.12); color:var(--brand2); font-weight:800; font-size:12px;
+      display:flex; align-items:center; justify-content:center; flex-shrink:0; margin-top:2px;
+    }
+    .steps li b{ color:var(--text); }
+    code{ background:rgba(15,23,42,.06); padding:2px 6px; border-radius:5px; font-size:12px; font-family:monospace; color:var(--brand2); }
+    .tbl{ width:100%; border-collapse:collapse; font-size:13px; margin-top:10px; }
+    .tbl th{ background:rgba(11,102,195,.10); color:var(--brand2); padding:8px 12px; text-align:left; font-weight:700; }
+    .tbl th:first-child{ border-radius:8px 0 0 8px; }
+    .tbl th:last-child{ border-radius:0 8px 8px 0; }
+    .tbl td{ padding:7px 12px; color:var(--muted); border-bottom:1px solid var(--stroke); }
+    .tbl tr:last-child td{ border-bottom:none; }
+    .rubric-item{
+      display:flex; align-items:center; gap:12px; padding:12px 16px;
+      background:rgba(255,255,255,.6); border:1px solid var(--stroke);
+      border-radius:12px; margin:8px 0;
+    }
+    .rubric-num{ font-size:11px; font-weight:800; color:var(--brand2); min-width:22px; }
+    .rubric-text{ flex:1; font-size:13px; color:var(--text); }
+    .rubric-score{ display:flex; gap:3px; align-items:center; }
+    .rubric-score span{
+      width:20px; height:20px; border-radius:4px; background:rgba(11,102,195,.08);
+      border:1px solid rgba(11,102,195,.15); font-size:9px; font-weight:700;
+      color:var(--muted); display:flex; align-items:center; justify-content:center;
+    }
+    .alert{
+      border-left:4px solid var(--amber); background:rgba(217,119,6,.07);
+      border-radius:0 12px 12px 0; padding:12px 16px; margin-top:12px;
+    }
+    .alert .atitle{ font-weight:800; font-size:12.5px; color:var(--amber); margin-bottom:4px; }
+    .alert p{ margin:0; font-size:13px; color:var(--muted); line-height:1.6; }
+    .info{
+      border-left:4px solid var(--brand); background:rgba(11,102,195,.06);
+      border-radius:0 12px 12px 0; padding:12px 16px; margin-top:12px;
+    }
+    .info .ititle{ font-weight:800; font-size:12.5px; color:var(--brand2); margin-bottom:4px; }
+    .info p{ margin:0; font-size:13px; color:var(--muted); line-height:1.6; }
+    .g2{ display:grid; grid-template-columns:1fr 1fr; gap:14px; }
+    @media(max-width:640px){ .g2{ grid-template-columns:1fr; } }
+    .footer{
+      margin-top:28px; padding:16px 22px;
+      background:rgba(255,255,255,.5); border:1px solid var(--stroke);
+      border-radius:14px; display:flex; justify-content:space-between; align-items:center;
+      flex-wrap:wrap; gap:10px; font-size:12px; color:var(--muted);
+    }
+    @media print{ body{ background:white; padding:0; } .shell{ max-width:100%; } }
+</style>
+</head>
+<body>
+<div class="shell">
+  <div class="header">
+    <img src="../logo-cenfo.png" alt="CENFOTEC" onerror="this.style.display='none'"/>
+    <div class="htxt"><div class="tag">A-TI-314 · Soporte Técnico IV · Proyecto del curso</div><h1>Proyecto Final — Brechas de seguridad en una empresa ficticia</h1><p>Diagnóstico de la infraestructura, propuesta de soluciones a las brechas y montaje de un entorno seguro. Defensa en la Semana 4.</p></div>
+    <div class="badge"><div class="bv">55%</div><div class="bl">del total</div></div>
+  </div>
+  <div class="meta"><span class="pill">📋 Tipo: Desempeño</span><span class="pill amber">⏱ Fuera de clase · con apoyo</span><span class="pill green">👥 Grupos: 3–4 estudiantes</span><span class="pill red">🔺 Complejidad: Alta</span><span class="pill">🎤 Presenta: Semana 4</span></div>
+
+  <div class="card">
+    <h2><span class="icon">📌</span> Descripción del proyecto</h2>
+    <p>El docente plantea un problema hipotético: una <b>empresa ficticia</b> con varios sistemas y computadores que
+       presentan <b>brechas de seguridad</b>. Cada grupo analiza la infraestructura, propone soluciones a esas brechas
+       y prepara el <b>entorno de trabajo seguro</b> (máquina virtual con Windows, herramientas y periférico).</p>
+    <div class="info">
+      <div class="ititle">💡 Nota para el docente</div>
+      <p>El proyecto se <b>asigna en la Semana 1</b> y se <b>presenta en la Semana 4</b>. La rúbrica viene del programa y
+      está orientada a un despliegue en máquina virtual (imagen de Windows, instalación del SO, herramientas e impresora).
+      Trabajen el avance cada semana.</p>
+    </div>
+  </div>
+
+  <div class="card">
+    <h2><span class="icon">⚙️</span> Datos del proyecto</h2>
+    <table class="tbl">
+      <thead><tr><th>Parámetro</th><th>Detalle</th></tr></thead>
+      <tbody>
+        <tr><td>Peso en la nota</td><td>55% del curso</td></tr>
+        <tr><td>Modalidad</td><td>Grupal, fuera de clase, con apoyo del docente</td></tr>
+        <tr><td>Complejidad</td><td>Alta · Enfoque práctico · Tipo desempeño</td></tr>
+        <tr><td>Se asigna</td><td>Semana 1</td></tr>
+        <tr><td>Se presenta</td><td>Semana 4 (defensa oral)</td></tr>
+        <tr><td>Criterios</td><td>6 (escala 1–10)</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="card">
+    <h2><span class="icon">🎯</span> Objetivo y capacidades</h2>
+    <p><b>Objetivo:</b> proponer y montar una solución que cierre las brechas de seguridad del escenario de la empresa ficticia.</p>
+    <p>Integra las <b>tres capacidades</b> del curso:</p>
+    <ul>
+      <li>Comprende la estructura y el funcionamiento de los equipos informáticos en la resolución de problemas.</li>
+      <li>Reconoce las funciones y roles del profesional de TI en la mejora del ambiente laboral.</li>
+      <li>Utiliza las normas de seguridad en la protección de los datos de los equipos.</li>
+    </ul>
+  </div>
+
+  <div class="card green">
+    <h2><span class="icon">🔧</span> Desarrollo sugerido</h2>
+    <ol class="steps">
+      <li><b>Definir los requerimientos:</b> levantar las brechas detectadas y los objetivos de seguridad.</li>
+      <li>Preparar la <b>imagen de Windows</b> base para el despliegue.</li>
+      <li><b>Configurar la máquina virtual</b> (recursos, red y almacenamiento).</li>
+      <li><b>Instalar el sistema operativo</b> y aplicar las actualizaciones.</li>
+      <li><b>Configurar las herramientas de Windows</b> de seguridad: usuarios y grupos, política local, firewall y antivirus.</li>
+      <li><b>Instalar la impresora</b> y dejar el entorno operativo.</li>
+      <li>Preparar la <b>presentación final</b> con el antes/después de cada brecha.</li>
+    </ol>
+  </div>
+
+  <div class="card purple">
+    <h2><span class="icon">📄</span> Entregables</h2>
+    <div class="g2">
+      <ul>
+        <li>Documento de requerimientos y brechas detectadas</li>
+        <li>Máquina virtual configurada y endurecida</li>
+        <li>Evidencias por cada criterio de la rúbrica</li>
+      </ul>
+      <ul>
+        <li>Presentación final del grupo (10 min)</li>
+        <li>Demostración en vivo de la solución</li>
+        <li>Conclusiones y recomendaciones</li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="card">
+    <h2><span class="icon">📊</span> Rúbrica del proyecto — escala 1–10</h2>
+    <p style="font-size:12px;color:var(--muted);margin-bottom:12px">1–3 Insatisfactoria · 4–6 Aceptable · 7–10 Satisfactoria</p>
+    <div class="rubric-item">
+      <div class="rubric-num">1</div>
+      <div class="rubric-text"><b>Definición de los requerimientos</b><br><span style="font-size:12px;color:var(--muted)">Levanta las brechas y los objetivos de seguridad con claridad.</span></div>
+      <div class="rubric-score"><span>1</span><span>2</span><span>3</span><span>4</span><span>5</span><span>6</span><span>7</span><span>8</span><span>9</span><span>10</span></div>
+    </div>
+    <div class="rubric-item">
+      <div class="rubric-num">2</div>
+      <div class="rubric-text"><b>Uso de la imagen de Windows</b><br><span style="font-size:12px;color:var(--muted)">Prepara y utiliza la imagen de Windows para el despliegue.</span></div>
+      <div class="rubric-score"><span>1</span><span>2</span><span>3</span><span>4</span><span>5</span><span>6</span><span>7</span><span>8</span><span>9</span><span>10</span></div>
+    </div>
+    <div class="rubric-item">
+      <div class="rubric-num">3</div>
+      <div class="rubric-text"><b>Configuración de la máquina virtual</b><br><span style="font-size:12px;color:var(--muted)">Configura recursos, red y almacenamiento de la VM.</span></div>
+      <div class="rubric-score"><span>1</span><span>2</span><span>3</span><span>4</span><span>5</span><span>6</span><span>7</span><span>8</span><span>9</span><span>10</span></div>
+    </div>
+    <div class="rubric-item">
+      <div class="rubric-num">4</div>
+      <div class="rubric-text"><b>Instalación del sistema operativo</b><br><span style="font-size:12px;color:var(--muted)">Instala el SO y aplica las actualizaciones.</span></div>
+      <div class="rubric-score"><span>1</span><span>2</span><span>3</span><span>4</span><span>5</span><span>6</span><span>7</span><span>8</span><span>9</span><span>10</span></div>
+    </div>
+    <div class="rubric-item">
+      <div class="rubric-num">5</div>
+      <div class="rubric-text"><b>Configuración de las herramientas de Windows</b><br><span style="font-size:12px;color:var(--muted)">Configura usuarios, política local, firewall y antivirus.</span></div>
+      <div class="rubric-score"><span>1</span><span>2</span><span>3</span><span>4</span><span>5</span><span>6</span><span>7</span><span>8</span><span>9</span><span>10</span></div>
+    </div>
+    <div class="rubric-item">
+      <div class="rubric-num">6</div>
+      <div class="rubric-text"><b>Instalación de la impresora</b><br><span style="font-size:12px;color:var(--muted)">Instala y deja operativa la impresora del entorno.</span></div>
+      <div class="rubric-score"><span>1</span><span>2</span><span>3</span><span>4</span><span>5</span><span>6</span><span>7</span><span>8</span><span>9</span><span>10</span></div>
+    </div>
+    <div style="margin-top:12px;padding:10px 14px;background:rgba(11,102,195,.06);border-radius:10px;font-size:13px;color:var(--brand2);font-weight:600">Nota final del proyecto = Promedio de los 6 criterios (escala 1–10) · 55% del curso</div>
+  </div>
+  <div class="footer"><span>A-TI-314 · Introducción al Soporte Técnico IV · Universidad CENFOTEC</span><span>Proyecto Final · 55% · Ing. Jeremy Alvarado B.</span></div>
+</div>
+</body>
+</html>

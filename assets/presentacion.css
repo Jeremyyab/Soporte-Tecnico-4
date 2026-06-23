@@ -1,0 +1,123 @@
+/* ============================================================
+   Motor de presentaciones — TI-314
+   ============================================================ */
+:root{
+  --p-bg:#13122a;
+  --p-bg2:#1c1a3d;
+  --p-card:#ffffff;
+  --p-ink:#1f2333;
+  --p-soft:#5b6072;
+  --p-brand:#7c5cff;
+  --p-brand-d:#6446e0;
+  --font-head:'Plus Jakarta Sans',system-ui,sans-serif;
+  --font-body:'Inter',system-ui,sans-serif;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html,body{height:100%}
+body{
+  font-family:var(--font-body);
+  background:radial-gradient(900px 500px at 20% 0%,#241f4f 0%,transparent 60%),
+             radial-gradient(800px 460px at 100% 100%,#1d2b57 0%,transparent 55%),
+             var(--p-bg);
+  color:var(--p-ink);overflow:hidden;
+}
+
+/* Barra superior */
+.topbar{
+  position:fixed;top:0;left:0;right:0;height:56px;z-index:30;
+  display:flex;align-items:center;gap:14px;padding:0 18px;
+  background:rgba(19,18,42,.78);backdrop-filter:blur(10px);
+  border-bottom:1px solid rgba(255,255,255,.08);color:#fff;
+}
+.topbar .home{display:flex;align-items:center;gap:8px;font-size:13px;font-weight:600;
+  color:#cfc9f7;padding:6px 12px;border-radius:9px;background:rgba(255,255,255,.07)}
+.topbar .home:hover{background:rgba(255,255,255,.14)}
+.topbar .title{font-family:var(--font-head);font-weight:700;font-size:14px;
+  white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.topbar .counter{margin-left:auto;font-size:13px;font-weight:700;color:#cfc9f7;
+  background:rgba(255,255,255,.08);padding:6px 13px;border-radius:9px;white-space:nowrap}
+
+/* Toolbar de lápiz */
+.tools{display:flex;align-items:center;gap:6px}
+.tbtn{
+  width:34px;height:34px;border:none;border-radius:9px;cursor:pointer;
+  background:rgba(255,255,255,.08);color:#e7e3ff;display:grid;place-items:center;
+  font-size:15px;transition:background .15s ease}
+.tbtn:hover{background:rgba(255,255,255,.18)}
+.tbtn.active{background:var(--p-brand);color:#fff;box-shadow:0 0 0 2px rgba(124,92,255,.35)}
+.swatch{width:20px;height:20px;border-radius:6px;border:2px solid rgba(255,255,255,.5);
+  cursor:pointer;padding:0}
+.swatch.active{border-color:#fff;transform:scale(1.12)}
+.sep{width:1px;height:24px;background:rgba(255,255,255,.14);margin:0 3px}
+.thick{display:flex;gap:4px}
+.thick button{width:30px;height:30px;border:none;border-radius:8px;cursor:pointer;
+  background:rgba(255,255,255,.08);display:grid;place-items:center}
+.thick button.active{background:var(--p-brand)}
+.thick button i{display:block;border-radius:50%;background:#fff}
+
+/* Escenario */
+.stage{position:absolute;inset:56px 0 64px;display:grid;place-items:center;padding:26px}
+.slide-frame{position:relative;width:min(960px,94vw);aspect-ratio:16/9;max-height:100%}
+.slide{
+  position:absolute;inset:0;background:var(--p-card);border-radius:20px;
+  box-shadow:0 30px 80px rgba(0,0,0,.4);padding:46px 54px;overflow:hidden;
+  opacity:0;pointer-events:none;transition:opacity .25s ease;
+  display:flex;flex-direction:column;
+}
+.slide.on{opacity:1;pointer-events:auto}
+canvas.ink{position:absolute;inset:0;width:100%;height:100%;z-index:5;
+  border-radius:20px;touch-action:none}
+canvas.ink.draw{cursor:crosshair}
+
+/* Contenido de slide */
+.slide .s-kicker{font-size:13px;font-weight:800;letter-spacing:1px;text-transform:uppercase;
+  color:var(--p-brand-d)}
+.slide h2{font-family:var(--font-head);font-size:clamp(24px,3.6vw,38px);font-weight:800;
+  line-height:1.15;letter-spacing:-.5px;margin:8px 0 16px}
+.slide h3{font-family:var(--font-head);font-size:clamp(19px,2.6vw,26px);font-weight:700;
+  margin:4px 0 14px;color:var(--p-brand-d)}
+.slide p{color:var(--p-soft);font-size:clamp(15px,1.9vw,18px);max-width:62ch}
+.slide ul{list-style:none;margin-top:10px}
+.slide ul li{position:relative;padding-left:30px;margin:11px 0;
+  font-size:clamp(15px,1.9vw,18.5px);color:#33384a}
+.slide ul li::before{content:"";position:absolute;left:4px;top:11px;width:9px;height:9px;
+  border-radius:3px;background:var(--p-brand)}
+.slide ul li b{color:var(--p-ink)}
+.slide .cover-badge{width:64px;height:64px;border-radius:18px;
+  background:linear-gradient(135deg,var(--p-brand),#a78bfa);display:grid;place-items:center;
+  color:#fff;font-family:var(--font-head);font-weight:800;font-size:26px;margin-bottom:18px}
+.slide .two{display:grid;grid-template-columns:1fr 1fr;gap:22px;margin-top:6px}
+.slide .mini{background:#f5f3fe;border:1px solid #e7e3fb;border-radius:14px;padding:16px 18px}
+.slide .mini h4{font-family:var(--font-head);font-size:16px;color:var(--p-brand-d);margin-bottom:6px}
+.slide .mini p{font-size:14.5px}
+.slide .tagrow{display:flex;flex-wrap:wrap;gap:8px;margin-top:14px}
+.slide .tagrow span{font-size:13px;font-weight:600;background:#efecfd;color:var(--p-brand-d);
+  padding:5px 12px;border-radius:999px}
+.slide .foot-num{position:absolute;bottom:18px;right:26px;font-size:13px;color:#aab;
+  font-weight:600}
+
+/* Barra inferior de navegación */
+.navbar{
+  position:fixed;bottom:0;left:0;right:0;height:64px;z-index:30;
+  display:flex;align-items:center;gap:14px;padding:0 18px;
+  background:rgba(19,18,42,.82);backdrop-filter:blur(10px);
+  border-top:1px solid rgba(255,255,255,.08);
+}
+.nbtn{display:flex;align-items:center;gap:8px;border:none;cursor:pointer;
+  font-family:var(--font-body);font-weight:700;font-size:14px;padding:10px 18px;border-radius:11px;
+  background:rgba(255,255,255,.10);color:#e7e3ff}
+.nbtn:hover{background:rgba(255,255,255,.2)}
+.nbtn.primary{background:var(--p-brand);color:#fff}
+.nbtn.primary:hover{background:var(--p-brand-d)}
+.nbtn:disabled{opacity:.35;cursor:default}
+.progress{flex:1;height:7px;border-radius:999px;background:rgba(255,255,255,.12);overflow:hidden}
+.progress>i{display:block;height:100%;width:0;border-radius:999px;
+  background:linear-gradient(90deg,var(--p-brand),#a78bfa);transition:width .25s ease}
+.kbd{font-size:11.5px;color:#9b97c2;white-space:nowrap}
+
+@media(max-width:680px){
+  .topbar .title{display:none}
+  .kbd{display:none}
+  .slide{padding:30px 26px}
+  .slide .two{grid-template-columns:1fr}
+}
